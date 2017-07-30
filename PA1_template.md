@@ -28,7 +28,7 @@ stepsPerDay <- tapply(activity$steps, activity$date, sum, na.rm=TRUE)
 qplot(stepsPerDay, main = "Total no. of steps taken per day", xlab = "No. of steps", ylab= "Frequency", binwidth = 500)
 ```
 
-![](PA1_template_files/figure-html/no. of step-1.png)<!-- -->
+![](PA1_template_files/figure-html/number_of_step-1.png)<!-- -->
 
 2. Mean and median total number of steps per day
 
@@ -55,7 +55,7 @@ g <- ggplot(avgStepsPerDay, aes(y = meanSteps, x = interval))
 g + geom_line() + labs(title = "Average daily activity pattern", xlab= "Interval", ylab = "Average no. of steps taken")
 ```
 
-![](PA1_template_files/figure-html/plot time series-1.png)<!-- -->
+![](PA1_template_files/figure-html/plot_time_series-1.png)<!-- -->
 
 3. Finding out which interval has maximum number of steps
 
@@ -73,5 +73,6 @@ maxStepInterval <- maxStep[,1]
 missingData <- sum(!complete.cases(activity))
 ```
 * Number of rows with NA is __2304__
+
 
 ## Are there differences in activity patterns between weekdays and weekends?

@@ -27,7 +27,7 @@ activity <- read.csv(filename, header = TRUE)
 ## What is mean total number of steps taken per day?
 
 1. Plotting total no. of steps taken per day
-```{r no. of step}
+```{r number_of_step}
 stepsPerDay <- tapply(activity$steps, activity$date, sum, na.rm=TRUE)
 qplot(stepsPerDay, main = "Total no. of steps taken per day", xlab = "No. of steps", ylab= "Frequency", binwidth = 500)
 ```
@@ -49,7 +49,7 @@ avgStepsPerDay <- summarise(by_interval, meanSteps = mean(steps))
 ```
 
 2. Plotting Average Steps per day vs interval
-```{r plot time series}
+```{r plot_time_series}
 g <- ggplot(avgStepsPerDay, aes(y = meanSteps, x = interval))
 g + geom_line() + labs(title = "Average daily activity pattern", xlab= "Interval", ylab = "Average no. of steps taken")
 ```
