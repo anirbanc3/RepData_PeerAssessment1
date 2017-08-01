@@ -11,6 +11,7 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE, results = "asis")
 ## Loading libraries
 ```{r load library}
 library(dplyr)
+library(timeDate)
 library(ggplot2)
 ```
 
@@ -38,7 +39,7 @@ meanStep <- mean(stepsPerDay)
 medianStep <- median(stepsPerDay)
 ```
 * Median total number of steps taken per day = __`r medianStep`__
-* Mean toal number of steps taken per day = __`r meanStep`__
+* Mean total number of steps taken per day = __`r meanStep`__
 
 ## What is the average daily activity pattern?
 
@@ -69,5 +70,38 @@ missingData <- sum(!complete.cases(activity))
 ```
 * Number of rows with NA is __`r missingData`__
 
+2. Filling in the NA values and imputing into new dataset
+```{r fill NA}
+activityNew <- activity %>% group_by(interval) %>%
+                    mutate(steps = replace(steps, is.na(steps),
+                                           mean(steps, na.rm = TRUE)))
+```
+
+3. Histogram of the new dataset
+```{r no_of_steps_new}
+stepsPerDay <- tapply(activityNew$steps, activityNew$date, sum)
+qplot(stepsPerDay, main = "Total no. of steps taken per day", xlab = "No. of steps", ylab= "Frequency", binwidth = 500)
+```
+
+4. Mean and median total number of steps per day
+```{r mean and meadian step new}
+meanStep <- mean(stepsPerDay)
+medianStep <- median(stepsPerDay)
+```
+* Median total number of steps taken per day = __`r medianStep`__
+* Mean total number of steps taken per day = __`r meanStep`__
 
 ## Are there differences in activity patterns between weekdays and weekends?
+1. Creating a new factor variable 
+```{r weekend_and_weekdays}
+activityNew$dateType <- ifelse(as.POSIXlt(activityNew$date)$wday %in% c(0,6),
+                               'weekend','weekday')
+```
+
+2. Make a panel plot using time series
+```{r time_series_dateType}
+by_interval <- activityNew %>% group_by(interval, dateType)
+avgStepsPerDay <- summarise(by_interval, meanSteps = mean(steps))
+ggplot(avgStepsPerDay, aes(interval, meanSteps)) + geom_line() + facet_grid( dateType ~ .) + labs(title = "Average daily activity pattern by dateType", xlab= "Interval", ylab = "Average no. of steps taken")
+```
+
